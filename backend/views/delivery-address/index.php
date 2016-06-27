@@ -1,0 +1,70 @@
+<?php
+
+use yii\helpers\Html;
+use yii\grid\GridView;
+
+/* @var $this yii\web\View */
+/* @var $searchModel backend\models\DeliveryAddressSearch */
+/* @var $dataProvider yii\data\ActiveDataProvider */
+
+$this->title = Yii::t('app', '邮寄地址');
+$this->params['breadcrumbs'][] = $this->title;
+?>
+<div class="delivery-address-index">
+
+    <h1><?= Html::encode($this->title) ?></h1>
+    <?php echo $this->render('_search', ['model' => $searchModel]); ?>
+<?php if(Yii::$app->user->can('/delivery-address/create')):?>
+    <p>
+        <?= Html::a(Yii::t('app', '+添加收货地址'), ['create'], ['class' => 'btn btn-success']) ?>
+    </p>
+<?php endif;?>
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+
+            'member_id',
+
+            'consignee',
+
+            'zipcode',
+
+            'mobile',
+
+            'email',
+
+            /*'country',
+
+            'province',
+
+            'city',
+
+            'district',
+
+            'address',*/
+            ['header' => '收货地址','content' => function($data){
+                    return $data->country.$data->province.$data->city.$data->district.$data->address;
+                }
+            ],
+
+            ['attribute' => 'is_default','content' => function($data){
+                    return $data->is_default == 0 ? '否' : '是';
+                }
+            ],
+
+            ['attribute' => 'is_del','content' => function($data){
+                    return $data->is_del == 0 ? '否' : '是';
+                }
+            ],
+
+            ['attribute' => 'create_time','content' => function($data){
+                    return date("Y-m-d H:i:s",$data->create_time);
+                }
+            ],
+
+            ['class' => 'yii\grid\ActionColumn'],
+        ],
+    ]); ?>
+
+</div>
